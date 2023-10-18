@@ -8,9 +8,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 CONTEXT = { # put settings here
     'site_title' : 'Arvids morohule',
+    'site_title_url_target' : '/',
     'welcome_msg' : 'Hei og velkommen til Arvids morohule',
     'default_profile_pic' : '/media/default_profile_pic.png',
     'allow_anonymous_users' : True,
+
            }
 
 app = Flask(__name__)
@@ -75,7 +77,7 @@ def register():
             db.session.commit()
         except SQLIntegrityError as e:
             # User already exists
-            flash('Sorry but that username already exists!','warning')
+            flash('Brukernavnet eksisterer fra før, beklager!','warning')
             return redirect(url_for('register'))
         
         flash('Account created successfully!', 'success')
@@ -103,7 +105,7 @@ def login():
             flash(f'Betal mere penger ellers smeller det!', 'danger')
             
             login_user(user)  # Log the user in
-            
+
             return redirect(url_for('index'))
         else:
             flash('Invalid username or password. Please try again.', 'error')
@@ -113,7 +115,7 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
-    flash("Du ble logget ut","success")
+    flash("Du ble logget ut","warning")
     return redirect('/')
 
 

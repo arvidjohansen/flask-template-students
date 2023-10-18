@@ -12,7 +12,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">{{site_title}}</a>
+            <a class="navbar-brand" href="{{site_title_url_target}}">{{site_title}}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -44,18 +44,34 @@
             </div>
         </div>
     </nav>
-
     {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
     <div class="container mt-3">
         {% for category, message in messages %}
         <div class="alert alert-dismissible alert-{{category}}"
-            role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+        role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
         </div>
+
+        {% if "logget ut" in message %}
+        <div class="alert alert-dismissible alert-danger"
+        role="alert">
+        
+        <img width="15%"
+        src="https://dinopixel.com/preload/0923/Philip-J-Fry.png"
+
+        >
+        
+        
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        {% endif %}
+
         {% endfor %}
     </div>
     {% endif %}
