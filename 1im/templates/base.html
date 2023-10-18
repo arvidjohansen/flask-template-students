@@ -12,7 +12,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">Your Website</a>
+            <a class="navbar-brand" href="#">{{site_title}}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -20,16 +20,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link {% if active_navbar_element == 'index' %} active {% endif %}" href="{{ url_for('index') }}">Home</a>
+                        <a class="nav-link {% if active_tab == 'index' %} active {% endif %}" href="{{ url_for('index') }}">Hjem</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                        <a class="nav-link" href="{{ url_for('register') }}">Ny bruker</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                        <a class="nav-link" href="{{ url_for('login') }}">Logg inn</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if active_tab == 'profile' %} active {% endif %}" href="{{ url_for('profile') }}">Home</a>
+                        <a class="nav-link {% if active_tab == 'profile' %} active {% endif %}" href="{{ url_for('profile') }}">Profil</a>
                     </li>
                 </ul>
             </div>

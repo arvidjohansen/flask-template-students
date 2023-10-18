@@ -4,21 +4,39 @@
 
 {% block content %}
 <div class="container">
-    <h1>Welcome to the Flask Login Example</h1>
+    <h1>
+      {% if user.is_authenticated %}
+        Hei {{user.username}}
+      {% else %}
+        Hei anonym bruker
+      {% endif %}
+    </h1>
+    {% if not user.is_authenticated %}
     <p><a href="{{ url_for('register') }}">Register</a> or <a href="{{ url_for('login') }}">Login</a></p>
+    {% endif %}
     
-    <div>
-        <div class="card" style="width: 18rem;">
+    <div class="row">
+        <div class="col-sm-4">
+          <div class="card" style="">
             <!--
-
-                <img class="card-img-top" src=".../100px180/" alt="Card image cap">
+              
+              <img class="card-img-top" src=".../100px180/" alt="Card image cap">
             -->
+            {% if user.is_authenticated %}
+            <div class="card-body">
+              <h5 class="card-title">Du er logget inn forresten</h5>
+              <p class="card-text">Det er bra, og bedre skal det bli!</p>
+              <a href="#" class="btn btn-primary">Hold kjeft</a>
+            </div>
+            {% else %}
             <div class="card-body">
               <h5 class="card-title">Card title</h5>
               <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
               <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
+            {% endif %}
           </div>
-    </div>
+        </div>
+      </div>
 </div>
 {% endblock %}
