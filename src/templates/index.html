@@ -6,7 +6,7 @@
 <div class="container">
     <h1>
       {% if user.is_authenticated %}
-        Hei {{user.username}}
+        Hei {{user.display_name}}
       {% else %}
         Hei anonym bruker
       {% endif %}

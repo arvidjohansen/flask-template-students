@@ -31,6 +31,7 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(80))
     last_name = db.Column(db.String(80))
 
+    @property
     def full_name(self):
         if self.first_name and self.last_name:
             # Hvis både fornavn og etternavn er satt
@@ -39,6 +40,10 @@ class User(db.Model, UserMixin):
         
         # Hvis ikke, bare vis brukernavnet
         return self.username
+
+    @property
+    def display_name(self):
+        return self.full_name
             
 
     def __repr__(self):
@@ -110,7 +115,14 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        password_valid = check_password_hash(user.password, password)
+        if user:
+            if user.password:
+                password_valid = check_password_hash(user.password, password)
+            else:
+                flash("Du må skrive inn et gyldig brukernavn!")
+        else:
+            flash("Du må skrive inn et gyldig brukernavn!")
+
         
         if user and password_valid:
             flash(f'Innloggingen var vellykket, velkommen tilbake {user}!', 'success')
@@ -121,7 +133,7 @@ def login():
 
             return redirect(url_for('index'))
         else:
-            flash('Invalid username or password. Please try again.', 'error')
+            flash('Feil med pålogging', 'error')
     return render_template('login.html',**context)
 
 @login_required
