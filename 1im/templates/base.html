@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Default Title{% endblock %}</title>
+    <title>{% block title %}{{site_title}}{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         crossorigin="anonymous">
 </head>
@@ -22,25 +22,34 @@
                     <li class="nav-item">
                         <a class="nav-link {% if active_tab == 'index' %} active {% endif %}" href="{{ url_for('index') }}">Hjem</a>
                     </li>
+                    {% if not user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('register') }}">Ny bruker</a>
+                        <a class="nav-link {% if active_tab == 'register' %} active {% endif %}" href="{{ url_for('register') }}">Ny bruker</a>
                     </li>
+
+
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('login') }}">Logg inn</a>
+                        <a class="nav-link {% if active_tab == 'login' %} active {% endif %}" href="{{ url_for('login') }}">Logg inn</a>
                     </li>
+                    {% else %}
                     <li class="nav-item">
                         <a class="nav-link {% if active_tab == 'profile' %} active {% endif %}" href="{{ url_for('profile') }}">Profil</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'logout' %} active {% endif %}" href="{{ url_for('logout') }}">Logg ut</a>
+                    </li>
+
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
     <div class="container mt-3">
-        {% for message in messages %}
-        <div class="alert alert-dismissible {% if 'error' in message %}alert-danger{% else %}alert-success{% endif %}"
+        {% for category, message in messages %}
+        <div class="alert alert-dismissible alert-{{category}}"
             role="alert">
             {{ message }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">

@@ -4,13 +4,13 @@
 
 {% block content %}
 <div class="container">
-    <h1>Login</h1>
+    <h1>Logg inn</h1>
     <form action="{{ url_for('login') }}" method="post">
-        <label for="username">Username:</label>
+        <label for="username">Brukernavn:</label>
         <input class="form-control" type="text" id="username" name="username" required><br>
-        <label for="password">Password:</label>
+        <label for="password">Passord:</label>
         <input class="form-control" type="password" id="password" name="password" required><br>
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" class="btn btn-primary">Logg inn</button>
     </form>
 </div>
 {% endblock %}
