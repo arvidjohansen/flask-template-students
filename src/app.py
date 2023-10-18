@@ -28,6 +28,8 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
+    first_name = db.Column(db.String(80))
+    last_name = db.Column(db.String(80))
 
     def __repr__(self):
         return str(self.username)
@@ -80,7 +82,7 @@ def register():
             flash('Brukernavnet eksisterer fra før, beklager!','warning')
             return redirect(url_for('register'))
         
-        flash('Account created successfully!', 'success')
+        flash('Brukerkonto opprettet, gratulerer!', 'success')
         
         return redirect(url_for('login'))
     return render_template('register.html',**context)
@@ -119,8 +121,37 @@ def logout():
     return redirect('/')
 
 
+@app.route('/profile/update', methods=['GET', 'POST'])
+@login_required
+def profile_update():
+    context = CONTEXT.copy()
+    context.update({
+        'active_tab': 'profile',
+        'user': current_user,
+    })
+
+    if request.method == 'POST':
+        # Get updated profile information from the form
+        new_first_name = request.form['first_name']
+        new_last_name = request.form['last_name']
+
+        # Update the user's profile information in the database
+        current_user.first_name = new_first_name
+        current_user.last_name = new_last_name
+
+        # Commit changes to the database
+        db.session.commit()
+
+        flash('Profil oppdatert!', 'success')
+        return redirect(url_for('profile'))
+
+    return render_template('profile_update.html', **context)
+
+
+
 
 if __name__ == '__main__':
     with app.app_context():
+        # db.drop_all()
         db.create_all()
     app.run(debug=True)
