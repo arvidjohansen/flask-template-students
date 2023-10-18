@@ -6,6 +6,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+
+# from flask import 
+
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -21,15 +24,24 @@ def index():
     nav_target = 'index'
     return render_template('index.html')
 
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    raise Exception
+    return render_template('profile.html', request=request, active_tab="profile")
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    active_navbar_element = 'register'
+    
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        hashed_password = generate_password_hash(password, method='sha256')
+        hashed_password = generate_password_hash(password, 
+                                                 # method='sha256'
+                                                 )
         new_user = User(username=username, password=hashed_password)
         db.session.add(new_user)
+        
         try:
             db.session.commit()
         except SQLIntegrityError as e:
@@ -38,6 +50,7 @@ def register():
             return redirect(url_for('login'))
         
         flash('Account created successfully!', 'success')
+        
         return redirect(url_for('login'))
     return render_template('register.html')
 
@@ -48,12 +61,21 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user and check_password_hash(user.password, password):
+        password_valid = check_password_hash(user.password, password)
+        if user and password_valid:
             flash('Login successful!', 'success')
             return redirect(url_for('index'))
         else:
             flash('Invalid username or password. Please try again.', 'error')
     return render_template('login.html')
+"""
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(somewhere)
+"""
+
 
 if __name__ == '__main__':
     with app.app_context():
