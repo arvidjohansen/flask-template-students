@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Your Website{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Welcome to the Flask Login Example</h1>
+    <p><a href="{{ url_for('register') }}">Register</a> or <a href="{{ url_for('login') }}">Login</a></p>
+    
+    <div>
+        <div class="card" style="width: 18rem;">
+            <!--
+
+                <img class="card-img-top" src=".../100px180/" alt="Card image cap">
+            -->
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+          </div>
+    </div>
+</div>
+{% endblock %}
