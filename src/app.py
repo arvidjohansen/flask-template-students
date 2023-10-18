@@ -31,6 +31,16 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(80))
     last_name = db.Column(db.String(80))
 
+    def full_name(self):
+        if self.first_name and self.last_name:
+            # Hvis både fornavn og etternavn er satt
+            # Vis fornavn + etternavn
+            return f'{self.first_name} {self.last_name}'
+        
+        # Hvis ikke, bare vis brukernavnet
+        return self.username
+            
+
     def __repr__(self):
         return str(self.username)
 
@@ -101,6 +111,7 @@ def login():
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
         password_valid = check_password_hash(user.password, password)
+        
         if user and password_valid:
             flash(f'Innloggingen var vellykket, velkommen tilbake {user}!', 'success')
             flash(f'Vi setter pris på ditt medlemskap', 'warning')

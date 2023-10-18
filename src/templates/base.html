@@ -24,13 +24,15 @@
                     </li>
                     {% if not user.is_authenticated %}
                     <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'login' %} active {% endif %}" href="{{ url_for('login') }}">Logg inn</a>
+                    </li>
+                    
+                    <li class="nav-item">
                         <a class="nav-link {% if active_tab == 'register' %} active {% endif %}" href="{{ url_for('register') }}">Ny bruker</a>
                     </li>
 
 
-                    <li class="nav-item">
-                        <a class="nav-link {% if active_tab == 'login' %} active {% endif %}" href="{{ url_for('login') }}">Logg inn</a>
-                    </li>
+                    
                     {% else %}
                     <li class="nav-item">
                         <a class="nav-link {% if active_tab == 'profile' %} active {% endif %}" href="{{ url_for('profile') }}">Profil</a>
