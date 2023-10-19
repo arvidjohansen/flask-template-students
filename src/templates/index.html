@@ -56,10 +56,23 @@
     </div>
     
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6 offset-sm-3">
           {% if user.is_authenticated %}
+            <div class="card mb-3">
+              <div class="card-title">
+                <h1 class="card-title pt-2 pl-3">
+
+                  Din QR-kode:
+                </h1>
+              </div>
+              <div class="card-body">
+              
+                <img src="https://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DSagg08DrO5U&amp;qzone=1&amp;margin=0&amp;size=400x400&amp;ecc=L" alt="qr code" />
+              </div>
+            </div>
+            
+          </div>
           
-          <img src="https://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DSagg08DrO5U&amp;qzone=1&amp;margin=0&amp;size=400x400&amp;ecc=L" alt="qr code" />
           </div>
           <div class="col-sm-12 pt-2">
             <!--
