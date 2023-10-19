@@ -24,6 +24,7 @@ CONTEXT = { # put settings here
     'welcome_msg' : 'Hei og velkommen til Arvids morohule',
     'default_profile_pic' : '/media/default_profile_pic.png',
     'allow_anonymous_users' : True,
+    'live_stream' : True,
 
            }
 
@@ -34,26 +35,30 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 login_manager = LoginManager(app)
 db = SQLAlchemy(app)
 camera=cv2.VideoCapture(0)
+htmx = HTMX(app)
+live_stream = CONTEXT['live_stream']
 
 def generate_frames():
-    while True:
+    while live_stream:
             
         ## read the camera frame
         success,frame=camera.read()
         if not success:
             break
         else:
-            ret,buffer=cv2.imencode('.jpg',frame)
+            ret,buffer=cv2.imencode('.png',frame)
             frame=buffer.tobytes()
 
         yield(b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                   b'Content-Type: image/png\r\n\r\n' + frame + b'\r\n')
 
 @app.route('/video')
 def video():
+    if not live_stream:
+        return None
     return Response(generate_frames(),mimetype='multipart/x-mixed-replace; boundary=frame')
 
-htmx = HTMX(app)
+
 
 
 
