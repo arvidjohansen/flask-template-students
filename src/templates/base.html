@@ -7,6 +7,35 @@
     <title>{% block title %}{{site_title}}{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         crossorigin="anonymous">
+    
+    <style>
+        @keyframes bounceIn {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1.2);
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        }
+
+        .alert {
+        animation: bounceIn 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        img {
+        transition: transform 0.5s;
+        }
+
+        img:hover {
+        transform: rotate(360deg);
+        }
+
+    </style>
 </head>
 
 <body>
