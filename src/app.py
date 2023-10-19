@@ -1,10 +1,17 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+import itertools
+import time
+from flask import Flask, Response, jsonify, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_login import UserMixin
 from flask_login import login_user, current_user, login_required, logout_user
+from flask_htmx import HTMX
 from sqlalchemy.exc import IntegrityError as SQLIntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
+
+basepath = os.getcwd()
+static_path = os.path.join(basepath,'static')
 
 CONTEXT = { # put settings here
     'site_title' : 'Arvids morohule',
@@ -21,6 +28,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 
 login_manager = LoginManager(app)
 db = SQLAlchemy(app)
+htmx = HTMX(app)
 
 
 
@@ -45,13 +53,51 @@ class User(db.Model, UserMixin):
     def display_name(self):
         return self.full_name
             
-
     def __repr__(self):
         return str(self.username)
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+messages = []  # List to store messages
+
+@app.post("/start-connection")
+def start_connection():
+    return """<div hx-ext="sse" sse-connect="/connect" sse-swap="message">
+        Contents of this box will be updated in real time
+        with every SSE message received from the chatroom.
+    </div>"""
+
+@app.route("/connect")
+def publish_hello():
+    def stream():
+        for idx in itertools.count():
+            msg = f'data: <p class=" card-text">Det har gått <strong>{idx}</strong> sekunder</p>\n\n'
+            yield msg
+            time.sleep(0.1)
+
+    return Response(stream(), mimetype="text/event-stream")
+
+@app.post("/ping")
+def route_clicked():
+    print("ping")
+    return """<button class="btn btn-lg btn-secondary" hx-post="/pong" hx-swap="outerHTML">Pong</button>"""
+
+@app.post("/pong")
+def route_pong():
+    print("pong")
+    return """<button class="btn btn-lg btn-primary" hx-post="/ping" hx-swap="outerHTML">Ping</button>"""
+
+@app.route('/static')
+def static_view():
+    context = CONTEXT.copy()
+    context.update({
+        'active_tab':'index',
+        'user' : current_user,
+    })
+    return render_template('index.html', **context)
 
 @app.route('/')
 def index():
@@ -169,8 +215,6 @@ def profile_update():
         return redirect(url_for('profile'))
 
     return render_template('profile_update.html', **context)
-
-
 
 
 if __name__ == '__main__':
