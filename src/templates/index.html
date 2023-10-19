@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container">
-    <h1>
+    <h1 class="pb-2">
       {% if user.is_authenticated %}
         Hei {{user.display_name}}
       {% else %}
@@ -21,7 +21,7 @@
           <div class="col-sm-6">
             <div class="card mb-3">
               <div class="card-title">
-                <h1 class="card-title pt-2 pl-3">
+                <h1 class="card-title pt-2 pl-3 mt-3">
 
                   Teller
                 </h1>
@@ -49,11 +49,29 @@
             </div>
             
           </div>
+
+          <div class="col-sm-12">
+            <div class="card mb-3">
+              <div class="card-title">
+                <h1 class="card-title pt-2 pl-3">
+
+                  Live stream
+                </h1>
+              </div>
+              <div class="card-body">
+                <div class="img">
+
+                  <img class="card-img-top"src="{{ url_for('video') }}" />
+                </div>
+              </div>
+            </div>
+            
+          </div>
           
           </div>
         </div>
       </div>
-    </div>
+    
     
     <div class="row">
         <div class="col-sm-6 offset-sm-3">
@@ -67,13 +85,13 @@
               </div>
               <div class="card-body">
               
-                <img src="https://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DSagg08DrO5U&amp;qzone=1&amp;margin=0&amp;size=400x400&amp;ecc=L" alt="qr code" />
+                <img class="card-img-top"src="https://api.qrserver.com/v1/create-qr-code/?color=000000&amp;bgcolor=FFFFFF&amp;data=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DSagg08DrO5U&amp;qzone=1&amp;margin=0&amp;size=400x400&amp;ecc=L" alt="qr code" />
               </div>
             </div>
             
           </div>
           
-          </div>
+        </div>
           <div class="col-sm-12 pt-2">
             <!--
 
