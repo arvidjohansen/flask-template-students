@@ -1,6 +1,6 @@
 # flask-template-students
 
-to run the application, run from terminal
+to run the application, type in terminal:
 
 Windows
 
