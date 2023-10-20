@@ -60,7 +60,7 @@
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link {% if active_tab == 'profile' %} active {% endif %}" href="{{ url_for('profile') }}">Profil</a>
+                        <a class="nav-link {% if active_tab == 'profile' %} active {% endif %}" href="{{ url_for('profile_update') }}">Profil</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if active_tab == 'logout' %} active {% endif %}" href="{{ url_for('logout') }}">Logg ut</a>

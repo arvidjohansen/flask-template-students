@@ -63,12 +63,14 @@ def video():
 
 
 
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     first_name = db.Column(db.String(80))
     last_name = db.Column(db.String(80))
+    # level = db.Column(db.Integer)
 
     @property
     def full_name(self):
@@ -252,4 +254,4 @@ if __name__ == '__main__':
     with app.app_context():
         # db.drop_all()
         db.create_all()
-    app.run(debug=True)
+    app.run(debug=True, host="10.82.65.199", port=80)
