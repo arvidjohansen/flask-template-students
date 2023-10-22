@@ -1,8 +1,8 @@
 
 import itertools
 import time
+import sys
 from flask import Flask, Response, jsonify, render_template, request, redirect, url_for, flash
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_login import UserMixin
@@ -68,8 +68,10 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    first_name = db.Column(db.String(80))
-    last_name = db.Column(db.String(80))
+    first_name = db.Column(db.String(80), default="")
+    last_name = db.Column(db.String(80), default="")
+    is_active = db.Column(db.Boolean, default=True)
+    is_admin = db.Column(db.Boolean, default=False)
     # level = db.Column(db.Integer)
 
     @property
@@ -94,7 +96,22 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+@app.get("/chat-messages")
+def chat_messages():
+
+    print("running chat_messages")
+    response = "<p>Chat messages:</p>"
+    for m in messages:
+        response += "<tr><td>{m}</td></tr>"
+    return response
+    return "hello from chat_messages"
+    return """<button class="btn btn-lg btn-secondary" hx-post="/pong" hx-swap="outerHTML">Pong</button>"""
+
+
+
 messages = []  # List to store messages
+
+
 
 @app.post("/start-connection")
 def start_connection():
@@ -198,9 +215,9 @@ def login():
             if user.password:
                 password_valid = check_password_hash(user.password, password)
             else:
-                flash("Du må skrive inn et gyldig brukernavn!")
+                flash('Du må skrive inn et gyldig brukernavn!', 'warning')
         else:
-            flash("Du må skrive inn et gyldig brukernavn!")
+            flash('Du må skrive inn et gyldig brukernavn!', 'warning')
 
         
         if user and password_valid:
@@ -208,11 +225,15 @@ def login():
             flash(f'Vi setter pris på ditt medlemskap', 'warning')
             flash(f'Betal mere penger ellers smeller det!', 'danger')
             
-            login_user(user)  # Log the user in
+            login_success = login_user(user)  # Log the user in
+            if not login_user:
+                # User is disabled with is_active=False
+                flash('Beklager, men denne brukerkontoen er deaktivert!', 'warning')
+                return redirect(url_for('login'))
 
             return redirect(url_for('index'))
         else:
-            flash('Feil med pålogging', 'error')
+            flash('Feil med pålogging', 'warning')
     return render_template('login.html',**context)
 
 @login_required
@@ -252,6 +273,23 @@ def profile_update():
 
 if __name__ == '__main__':
     with app.app_context():
-        # db.drop_all()
+        if 'drop_all' in sys.argv:
+            # DROP ALL TABLES, RESET ALL DATA
+            if 'y' == input('WARNING, THIS WILL DELETE ALL DATA! CONTINUE? (y/n)').lower():
+                 print('OK, DROPPING ALL TABLES...')
+                 db.drop_all()
+                 print('ALL TABLES DROPPED, DATA RESET!')
+                 for arg in sys.argv: arg.pop()
+        elif 'db_shell' in sys.argv:
+            keep_going = True
+            while keep_going:
+                try:
+                    print(eval(input(f'>>> ')))
+                except Exception as e:
+                    print(f'Error: {e}')
+             
         db.create_all()
-    app.run(debug=True, host="10.82.65.199", port=80)
+    app.run(debug=True, 
+            #host="10.82.65.199", 
+            # port=80
+            )
