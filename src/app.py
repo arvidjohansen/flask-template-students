@@ -98,21 +98,6 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@app.get("/chat-messages")
-def chat_messages():
-
-    print("running chat_messages")
-    response = "<p>Chat messages:</p>"
-    for m in messages:
-        response += "<tr><td>{m}</td></tr>"
-    return response
-    return "hello from chat_messages"
-    return """<button class="btn btn-lg btn-secondary" hx-post="/pong" hx-swap="outerHTML">Pong</button>"""
-
-
-
-messages = []  # List to store messages
-
 
 
 @app.post("/start-connection")
@@ -277,21 +262,17 @@ if __name__ == '__main__':
     with app.app_context():
         if 'drop_all' in sys.argv:
             # DROP ALL TABLES, RESET ALL DATA
+            # USE THIS TO DELETE ALL DATA
             if 'y' == input('WARNING, THIS WILL DELETE ALL DATA! CONTINUE? (y/n)').lower():
                  print('OK, DROPPING ALL TABLES...')
                  db.drop_all()
                  print('ALL TABLES DROPPED, DATA RESET!')
                  for arg in sys.argv: arg.pop()
-        elif 'db_shell' in sys.argv:
-            keep_going = True
-            while keep_going:
-                try:
-                    print(eval(input(f'>>> ')))
-                except Exception as e:
-                    print(f'Error: {e}')
              
         db.create_all()
-    app.run(debug=True, 
-            host="10.82.65.199", 
-            # port=80
+    app.run(
+        debug=True, 
+        # host="10.82.65.199", # lokalnettverk - replace with lan ip
+        # host="0.0.0.0", # alle interfaces
+        # port=80 # krever admin/root - bruk standard http port
             )
