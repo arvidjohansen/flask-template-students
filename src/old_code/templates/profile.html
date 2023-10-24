@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Your Website{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Velkommen {{user}}</h1>
+    <div>
+        <div class="card" 
+        >
+        <!--
+
+          style="width: 18rem;"
+        -->
+            <!--
+
+                <img class="card-img-top" src=".../100px180/" alt="Card image cap">
+            -->
+            <div class="card-body">
+              <h5 class="card-title">Registrert data på bruker nr: ({{user.id}}) - {{user.username}} </h5>
+              <table class="table table-responsive">
+                <tr>
+                  <td>
+                    <strong>
+                    Innlogget
+                  </strong>
+                  </td>
+                  <td>
+                      {{user.is_authenticated}}
+                </td>
+                </tr>
+                {% for property,value in userdata.items() %}
+                <tr>
+                  <td>
+                    <strong>
+                    {{property|capitalize}}
+                  </strong>
+                  </td>
+                  <td>
+                      {{value}}
+                </td>
+                </tr>
+                {% endfor %}
+              </table>
+              <a href="{{ url_for('profile_update') }}" class="btn btn-warning">Rediger</a>
+
+            </div>
+          </div>
+    </div>
+</div>
+{% endblock %}
