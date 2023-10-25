@@ -30,10 +30,3 @@ graph TD
 
 ---
 
-For å kunne kjøre må du ha installert flask-modulen med:
-
-```
-pip install flask
-```
-
-## Oppgave: Utvid koden til å bruke templates - programmet skal rendre en template og sende den tilbake.
