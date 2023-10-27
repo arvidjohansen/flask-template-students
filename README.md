@@ -8,7 +8,7 @@ Windows
 python.exe app.py
 ```
 
-Linux
+Linux/Mac
 
 ```terminal
 python3 app.py
