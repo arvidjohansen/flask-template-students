@@ -1,6 +1,3 @@
-
-import itertools
-import time
 import sys
 from flask import Flask, Response, jsonify, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
@@ -11,12 +8,7 @@ from flask_htmx import HTMX
 from sqlalchemy.exc import IntegrityError as SQLIntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 
-import cv2
 
-import os
-
-basepath = os.getcwd()
-static_path = os.path.join(basepath,'static')
 
 CONTEXT = { # put settings here
     'site_title' : 'Arvids morohule',
@@ -25,7 +17,6 @@ CONTEXT = { # put settings here
     'default_profile_pic' : '/media/default_profile_pic.png',
     'allow_anonymous_users' : True,
     'live_stream' : True,
-
            }
 
 app = Flask(__name__)
@@ -34,36 +25,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 
 login_manager = LoginManager(app)
 db = SQLAlchemy(app)
-camera=cv2.VideoCapture(0)
 htmx = HTMX(app)
-live_stream = CONTEXT['live_stream']
-
-def generate_frames():
-    if not live_stream:
-        return Response(None)
-    while live_stream:
-            
-        ## read the camera frame
-        success,frame=camera.read()
-        if not success:
-            break
-        else:
-            ret,buffer=cv2.imencode('.png',frame)
-            frame=buffer.tobytes()
-
-        yield(b'--frame\r\n'
-                   b'Content-Type: image/png\r\n\r\n' + frame + b'\r\n')
-
-@app.route('/video')
-def video():
-    if not live_stream:
-        return Response(None)
-    return Response(generate_frames(),mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
-
-
-
 
 
 class User(db.Model, UserMixin):
@@ -74,7 +36,6 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String(80), default="")
     is_active = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
-    # level = db.Column(db.Integer)
 
     @property
     def full_name(self):
@@ -97,25 +58,6 @@ class User(db.Model, UserMixin):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-
-
-
-@app.post("/start-connection")
-def start_connection():
-    return """<div hx-ext="sse" sse-connect="/connect" sse-swap="message">
-        Contents of this box will be updated in real time
-        with every SSE message received from the chatroom.
-    </div>"""
-
-@app.route("/connect")
-def publish_hello():
-    def stream():
-        for idx in itertools.count():
-            msg = f'data: <p class=" card-text">Det har gått <strong>{idx}</strong> sekunder</p>\n\n'
-            yield msg
-            time.sleep(0.1)
-
-    return Response(stream(), mimetype="text/event-stream")
 
 @app.post("/ping")
 def route_clicked():
@@ -144,17 +86,6 @@ def index():
         'user' : current_user,
     })
     return render_template('index.html', **context)
-
-@app.route('/profile', methods=['GET', 'POST'])
-def profile():
-    context = CONTEXT.copy()
-    context.update({
-        'active_tab' : 'profile',
-        'user' : current_user,
-        'userdata' : vars(current_user), # testing
-    })
-    return render_template('profile.html', **context)
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -230,7 +161,6 @@ def logout():
     flash("Du ble logget ut","warning")
     return redirect('/')
 
-
 @app.route('/profile/update', methods=['GET', 'POST'])
 @login_required
 def profile_update():
@@ -268,7 +198,6 @@ if __name__ == '__main__':
                  db.drop_all()
                  print('ALL TABLES DROPPED, DATA RESET!')
                  for arg in sys.argv: arg.pop()
-             
         db.create_all()
     app.run(
         debug=True, 
