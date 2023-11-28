@@ -13,14 +13,14 @@ class: invert
 For å kunne kjøre flask-applikasjoner må du ha installert flask-modulen med:
 
 ```
-pip install flask
+pip install flask==2.3.2
 ```
 
 * Hvis du skal kjøre en flask-applikasjon som inneholder en rekke moduler som feks login, database-acces, webcam osv
     * Da følger det som regel med **requirements.txt**
         * Dette er en liste med de påkrevde modulene (linje for linje)
 
-For å installere alle modulene kan du bruke kommandoen
+For å installere alle modulene kan du bruke kommandoen:
 
 ```
 pip install -r requirements.txt 
@@ -56,9 +56,9 @@ Inne i templates-mappen, opprett en HTML-fil for eksempel med navnet index.html.
 
 ---
 
-# Eksempel 2: Basic flask server med templates
 
-3. Endre Flask-koden:
+
+3. Endre Flask-koden til å se slik ut:
 
 ```py
 from flask import Flask, render_template
@@ -70,7 +70,24 @@ def home():
     return render_template('index.html')
 ```
 
+
+
 ---
+
+## Veien videre....
+
+Her kommer...
+
+* Login example
+
+Sjekk ut **flask-templates-cheatsheet** for detaljer for hvordan man bruker template-systemet.
+
+---
+
+<style scoped>
+
+
+</style>
 
 ```py
 @app.route('/login', methods=['GET', 'POST'])
@@ -178,6 +195,8 @@ def register():
 
 
 
+
+
 ---
 
 # Hjelpemidler
@@ -187,4 +206,3 @@ https://arvidjohansen.github.io/html-templates/
 Se igjennom listen av templates her og se om du finner noen som passer for ditt prosjekt
 
 ![w:500 bg right](html-template.png )
-

@@ -3,13 +3,10 @@ marp: true
 #class: inverted
 author: Arvid Johansen
 size: 16:9
-theme: gaia
+
 
 ---
 
-<!-- backgroundImage: "linear-gradient(to bottom, #67b8e3, #0288d1)" 
-
--->
 <!--
 class: invert
 -->
