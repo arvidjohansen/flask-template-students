@@ -1,11 +1,10 @@
 ---
 marp: true
-theme: gaia
 class: invert
 ---
 
 # Flask tutorial - basic flask server
-![bg 40%](index-page.png )
+![right bg fit](index-page.png )
 
 
 ---
@@ -74,16 +73,18 @@ def home():
 
 ---
 
-## Veien videre....
+## Gratulerer, du har laget ditt første prosjekt!
 
-Her kommer...
+Neste steg:
 
-* Login example
-
-Sjekk ut **flask-templates-cheatsheet** for detaljer for hvordan man bruker template-systemet.
+1. Sjekk ut [flask-cheatsheet.md](flask-cheatsheet) for videre bruk av flask
+1. Sjekk ut [flask-templates-cheatsheet.md](flask-templates-cheatsheet) for detaljer om template-systemet
 
 ---
 
+## Noen eksempler på hva som kommer videre:
+
+---
 <style scoped>
 
 
