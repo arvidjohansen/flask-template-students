@@ -1,5 +1,9 @@
 # All resources:
 
+## Læreprosess
+
+![auto](./prosess-webutvikling.drawio.png)
+
 ## Tutorials:
 
 [Hvordan lage Debian 10 VM i Azure](azure-vm-howto.md)
