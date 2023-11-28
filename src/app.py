@@ -1,4 +1,5 @@
 import sys
+from datetime import datetime
 from flask import Flask, Response, jsonify, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -28,6 +29,7 @@ db = SQLAlchemy(app)
 htmx = HTMX(app)
 
 
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -36,6 +38,9 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String(80), default="")
     is_active = db.Column(db.Boolean, default=True)
     is_admin = db.Column(db.Boolean, default=False)
+
+    posts = db.relationship('Post', back_populates='user')
+
 
     @property
     def full_name(self):
@@ -54,10 +59,59 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return str(self.username)
 
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', back_populates='posts')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # Timestamp when the post was created
+    modified_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)  # Timestamp when the post was last modified
+    
+    def __repr__(self):
+        return f'<Post {self.title}>'
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+@app.route('/posts')
+def posts():
+    context = CONTEXT.copy()
+    context.update({
+        'active_tab': 'posts',
+        'user': current_user,
+        'posts': Post.query.all()  # Fetch all posts from the database
+    })
+    return render_template('posts.html', **context)
+
+@app.route('/create-post', methods=['GET', 'POST'])
+@login_required
+def create_post():
+    context = CONTEXT.copy()
+    context.update({
+        'active_tab': 'create-post',
+        'user': current_user,
+    })
+
+    if request.method == 'POST':
+        # Get post data from the form
+        title = request.form['title']
+        content = request.form['content']
+
+        # Create a new post object and associate it with the current user
+        new_post = Post(title=title, content=content, user=current_user)
+
+        # Add the post to the database session and commit the changes
+        db.session.add(new_post)
+        db.session.commit()
+
+        flash('Post created successfully!', 'success')
+        return redirect(url_for('posts'))  # Redirect to the list of posts page after creating a post
+
+    return render_template('create_post.html', **context)
 
 @app.post("/ping")
 def route_clicked():
@@ -68,15 +122,6 @@ def route_clicked():
 def route_pong():
     print("pong")
     return """<button class="btn btn-lg btn-primary" hx-post="/ping" hx-swap="outerHTML">Ping</button>"""
-
-@app.route('/static')
-def static_view():
-    context = CONTEXT.copy()
-    context.update({
-        'active_tab':'index',
-        'user' : current_user,
-    })
-    return render_template('index.html', **context)
 
 @app.route('/')
 def index():
@@ -197,7 +242,6 @@ if __name__ == '__main__':
                  print('OK, DROPPING ALL TABLES...')
                  db.drop_all()
                  print('ALL TABLES DROPPED, DATA RESET!')
-                 for arg in sys.argv: arg.pop()
         db.create_all()
     app.run(
         debug=True, 

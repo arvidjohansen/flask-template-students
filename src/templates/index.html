@@ -21,15 +21,18 @@
       <div class="card mb-3 bg-warning text-white h-100">
         <div class="card-title">
           <h1 class="card-title pt-2 pl-3 mt-3">
-            Eksempel på en view
+            Nyheter
           </h1>
         </div>
         <div class="card-body">
 
           <p class="text-muted">
-            Midlertidig testview
+            For å lese nyheter kan du <a href="{{url_for('posts') }}">klikke her</a>
           </p>
-          <button class="btn btn-lg btn-primary">Knapp 1</button>
+          <a href="{{url_for('posts') }}">
+
+            <button class="btn btn-lg btn-primary">Nyheter</button>
+          </a>
         </div>
       </div>
     </div>
@@ -42,7 +45,7 @@
           </h1>
         </div>
         <div class="card-body">
-          <p>Dette er en test med pingpong</p>
+          <p>Dette er en test med pingpong. Send en request til serveren og se om den svarer!</p>
           <button class="btn btn-lg btn-warning" hx-post="/pong" hx-swap="outerHTML">Pong</button>
         </div>
       </div>

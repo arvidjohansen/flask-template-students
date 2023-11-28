@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Create a New Post - {{ site_title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="pb-2 text-primary">Create a New Post</h1>
+
+    <div class="row mt-4">
+        <div class="col-sm-12">
+            <form method="POST" action="{{ url_for('create_post') }}">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea class="form-control" id="content" name="content" rows="6" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Post</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

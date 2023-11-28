@@ -43,17 +43,25 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="{{site_title_url_target}}">{{site_title}}</a>
+  
+            <a class="navbar-brand" href="{{site_title_url_target}}"> {{site_title}}</a>
+   
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
+                    
+                    
                     <li class="nav-item">
                         <a class="nav-link {% if active_tab == 'index' %} active {% endif %}" href="{{ url_for('index') }}">Hjem</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'posts' %} active {% endif %}" href="{{ url_for('posts') }}">Nyheter</a>
+                    </li>
                     {% if not user.is_authenticated %}
+                    
                     <li class="nav-item">
                         <a class="nav-link {% if active_tab == 'login' %} active {% endif %}" href="{{ url_for('login') }}">Logg inn</a>
                     </li>
@@ -61,6 +69,9 @@
                         <a class="nav-link {% if active_tab == 'register' %} active {% endif %}" href="{{ url_for('register') }}">Ny bruker</a>
                     </li>
                     {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_tab == 'create-post' %} active {% endif %}" href="{{ url_for('create_post') }}">Lag nyhet</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link {% if active_tab == 'profile' %} active {% endif %}" href="{{ url_for('profile_update') }}">Profil</a>
                     </li>
@@ -106,7 +117,7 @@
     {% endif %}
     {% endwith %}
 
-    <div class="container mt-3">
+    <div class="container mt-3 pb-5">
         {% block content %}
             
         {% endblock %}

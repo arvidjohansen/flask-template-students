@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ site_title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="pb-2 text-primary">
+        {% if user.is_authenticated %}
+        Welcome, {{ user.display_name }}!
+        {% else %}
+        Hey there, anonymous user!
+        {% endif %}
+    </h1>
+    {% if not user.is_authenticated %}
+    <p><a href="{{ url_for('login') }}" class="btn btn-primary">Log in</a> or <a href="{{ url_for('register') }}"
+            class="btn btn-success">Create an Account</a></p>
+    {% endif %}
+
+    <div class="row mt-4">
+        {% if posts %}
+            {% for post in posts %}
+            <div class="col-sm-6 pb-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.content }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Posted by {{ post.user.display_name }} on {{ post.modified_at }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+                <p>
+                    Sorry, no posts found,click <a href="{{url_for('create_post')}}">here</a> to create new!
+
+                </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
