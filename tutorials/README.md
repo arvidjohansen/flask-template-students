@@ -12,6 +12,7 @@
 
 [Ditt første flask-prosjekt](flask-tutorial.md)
 
+[Lage flask-prosjekt av bootstrap-template](flask-bootstrap-tutorial.md)
 
 ## Cheatsheets
 
